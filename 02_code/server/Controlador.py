@@ -25,6 +25,3 @@ class Controlador:
         x, y, z, e = map(float, coordenadas[0])
         e_bool = e != 0.0
         return [modo_coordenadas, x, y, z, e_bool]
-
-
-        
