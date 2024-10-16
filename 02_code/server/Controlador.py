@@ -23,7 +23,8 @@ class Controlador:
         modo_coordenadas = 0 if "ABSOLUTE MODE" in respuesta else 1
         coordenadas = re.findall(r'X:(-?\d+\.\d+)\sY:(-?\d+\.\d+)\sZ:(-?\d+\.\d+)\sE:(-?\d+\.\d+)', respuesta)
         x, y, z, e = map(float, coordenadas[0])
-        return [modo_coordenadas, x, y, z, e]
+        e_bool = e != 0.0
+        return [modo_coordenadas, x, y, z, e_bool]
 
 
         

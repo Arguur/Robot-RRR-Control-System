@@ -8,7 +8,8 @@ class Server:
         self.controlador = controlador
         self.modo_trabajo = modo_trabajo
         self.users = list()
-        self.robot = Robot()
+        init = controlador.inicializacion()
+        self.robot = Robot(init)
         self.logDeTrabajo = LogDeTrabajo()
 
     def validar_usuario(self, ip):
