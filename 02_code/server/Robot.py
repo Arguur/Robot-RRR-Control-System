@@ -1,3 +1,5 @@
+from Controlador import Controlador, re
+
 class Robot:
     def __init__(self, modo_coordenadas, x, y, z, gripper, conectado=False, motores=False):
         # Modo coordenadas
@@ -13,25 +15,46 @@ class Robot:
 
     # Movimiento lineal con x, y, z
     def movimiento_lineal(self, x, y, z):
-        self.x = float(x)
-        self.y = float(y)
-        self.z = float(z)
-        print(f"Movimiento lineal ejecutado. Nueva posición: x={self.x}, y={self.y}, z={self.z}")
+        if self.modo_coordenadas == 0:
+            Controlador.escribir(f"G1 X{x} Y{y} Z{z} F100\r\n")
+        else:
+            Controlador.escribir(f"G1 X{x-self.x} Y{y-self.y} Z{z-self.z} F100\r\n")
+        respuesta = Controlador.leer()
+        if "error" in respuesta.lower():
+            raise Exception("ERROR: POINT IS OUTSIDE OF WORKSPACE")
+        else:
+            coordenadas = re.findall(r'X:(-?\d+\.\d+)\sY:(-?\d+\.\d+)\sZ:(-?\d+\.\d+)\sE:(-?\d+\.\d+)', respuesta)
+            self.x, self.y, self.z, self.gripper = map(float, coordenadas[0])
+        return respuesta
+
+
 
     # Movimiento lineal con x, y, z y velocidad v
     def movimiento_lineal_con_velocidad(self, x, y, z, v):
-        self.x = float(x)
-        self.y = float(y)
-        self.z = float(z)
-        print(f"Movimiento lineal ejecutado con velocidad {v}. Nueva posición: x={self.x}, y={self.y}, z={self.z}")
+        if self.modo_coordenadas == 0:
+            Controlador.escribir(f"G1 X{x} Y{y} Z{z} F{v}\r\n")
+        else:
+            Controlador.escribir(f"G1 X{x-self.x} Y{y-self.y} Z{z-self.z} F{v}\r\n")
+        respuesta = Controlador.leer()
+        if "error" in respuesta.lower():
+            raise Exception("ERROR: POINT IS OUTSIDE OF WORKSPACE")
+        else:
+            coordenadas = re.findall(r'X:(-?\d+\.\d+)\sY:(-?\d+\.\d+)\sZ:(-?\d+\.\d+)\sE:(-?\d+\.\d+)', respuesta)
+            self.x, self.y, self.z, self.gripper = map(float, coordenadas[0])
+        return respuesta
+        
 
     # Activación del efector final (gripper)
-    def activar_gripper(self):
-        if not self.gripper:
-            self.gripper = True
-            velocidad_trabajo = 1.0  # Valor inicial para la velocidad de trabajo
-            tiempo_operacion = 2.0   # Valor inicial para el tiempo de operación
-            sentido_movimiento = "horario"  # Valor inicial para el sentido de movimiento
-            print(f"Gripper activado. Velocidad de trabajo: {velocidad_trabajo}, Tiempo de operación: {tiempo_operacion}, Sentido de movimiento: {sentido_movimiento}")
-        else:
-            print("Gripper ya está activado.")
+    def activar_desactivar_gripper(self, activar):
+        if activar==True:
+            Controlador.escribir("M3")
+            respuesta = Controlador.leer()
+            if "info" in respuesta.lower():
+                self.gripper = True
+        if activar==False:
+            Controlador.escribir("M5")
+            respuesta = Controlador.leer()
+            if "info" in respuesta.lower():
+                self.gripper = False
+        return respuesta
+
