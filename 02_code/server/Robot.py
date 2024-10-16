@@ -71,9 +71,3 @@ class Robot:
             print(f"Gripper activado. Velocidad de trabajo: {velocidad_trabajo}, Tiempo de operación: {tiempo_operacion}, Sentido de movimiento: {sentido_movimiento}")
         else:
             print("Gripper ya está activado.")
-
-# Ejemplo de uso
-robot = Robot()
-robot.movimiento_lineal(5.0, 10.0, 15.0)
-robot.movimiento_lineal_con_velocidad(3.0, 6.0, 9.0, 1.5)
-robot.activar_gripper()
