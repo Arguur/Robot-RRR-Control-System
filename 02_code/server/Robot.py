@@ -45,16 +45,30 @@ class Robot:
         
 
     # Activación del efector final (gripper)
-    def activar_desactivar_gripper(self, activar):
-        if activar==True:
+    def activar_desactivar_gripper(self):
+        if self.gripper == False:
             Controlador.escribir("M3")
             respuesta = Controlador.leer()
             if "info" in respuesta.lower():
                 self.gripper = True
-        if activar==False:
+        if self.gripper == True:
             Controlador.escribir("M5")
             respuesta = Controlador.leer()
             if "info" in respuesta.lower():
                 self.gripper = False
         return respuesta
+    
+    # Activación y desactivación de los motores    
+    def activar_desactivar_motores(self):
+        if self.motores == False:
+            Controlador.escribir("M17")
+            respuesta = Controlador.leer()
+            if "info" in respuesta.lower():
+                self.motores = True
+        if self.motores == True:
+            Controlador.escribir("M18")
+            respuesta = Controlador.leer()
+            if "info" in respuesta.lower():
+                self.motores = False
+    
 
