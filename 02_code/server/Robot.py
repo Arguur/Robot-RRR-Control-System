@@ -1,5 +1,7 @@
 class Robot:
-    def __init__(self, x=0.0, y=0.0, z=0.0, gripper=False, conectado=False, motores=False):
+    def __init__(self, modo_coordenadas, x, y, z, gripper=False, conectado=False, motores=False):
+        # Modo coordenadas
+        self.modo_coordenadas = modo_coordenadas
         # Coordenadas del robot
         self.x = float(x)
         self.y = float(y)
