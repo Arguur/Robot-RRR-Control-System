@@ -50,41 +50,47 @@ class ControladorServidor:
             return f"Error al intentar activar/desactivar los motores: {str(e)}"
 
     def reporte_informacion_general(self):
-        # Estado de conexión
-        estado_conexion = f"Puerto: {self.server.controlador.puerto}, Baudrate: {self.server.controlador.baudrate}, Timeout: {self.server.controlador.time_out}"
-        # Posición del robot
-        posicion = f"x: {self.server.robot.x}, y: {self.server.robot.y}, z: {self.server.robot.z}"
-        # Estado de actividad actual
-        estado_actividad = "Finalizada" if self.server.estado_actividad_actual else "En proceso"
-        # Detalle de actividades en el log de trabajo
-        actividades = "\nOrden\tDetalle\tIP\tEstado\tMarca de Tiempo\n"
-        for actividad in self.server.log_de_trabajo.actividades:
-            estado = "Éxito" if actividad.exito else "Fallo"
-            actividades += f"{actividad.orden}\t{actividad.detalle}\t{actividad.user.ip}\t{estado}\t{actividad.marcaTiempo}\n"
-        # Cantidad de actividades
-        cantidad_actividades = f"Cantidad de actividades: {len(self.server.log_de_trabajo.actividades)}"
+        return self.server.controlador, self.server.robot, self.server.log_de_trabajo, self.server.estado_actividad_actual
+
 
     def reporte_log(self):
         self.server.log_de_trabajo.abrir_log()
 
     def modo_trabajo(self):
-        self.server.modo_trabajo = True
-        self.server.modo_coordenadas = False
-        pass
+        try:
+            self.server.modo_trabajo = not self.server.modo_trabajo
+            return f"Modo de trabajo cambiado a {self.server.modo_trabajo}"
+        except Exception as e:
+            return f"Error al cambiar el modo de trabajo: {str(e)}"
 
     def modo_coordenadas(self):
-        self.server.modo_coordenadas = True
-        self.server.modo_trabajo = False
-        pass
+        try:
+            self.server.modo_coordenadas = not self.server.modo_coordenadas
+            return f"Modo de coordenadas cambiado a {self.server.modo_coordenadas}"
+        except Exception as e:
+            return f"Error al cambiar el modo de coordenadas: {str(e)}"
+
 
     def mostrar_parametros_conexion(self) -> Controlador:
-        return self.server.controlador
+        try:
+            controlador = self.server.controlador
+            if controlador is None:
+                raise ValueError("El controlador no está configurado.")
+            return controlador
+        except AttributeError as e:
+            raise AttributeError(f"Error de atributo: {str(e)}")
+        except Exception as e:
+            raise RuntimeError(f"Error inesperado al obtener el controlador: {str(e)}")
+
 
     def editar_parametros_conexion(self, puerto: str, baudrate: int, timeout: int):
-        self.server.controlador.puerto = puerto
-        self.server.controlador.baudrate = baudrate
-        self.server.controlador.time_out = timeout
-        pass
+        try:
+            self.server.controlador.puerto = puerto
+            self.server.controlador.baudrate = baudrate
+            self.server.controlador.time_out = timeout
+            return f"Se han actualizado los parametros de conexión a: puerto: {puerto}, baudrate: {baudrate}, timeout: {timeout} con éxito"
+        except Exception as e:
+            return f"Error al intentar actualizar los parametros de conexión a: puerto: {puerto}, baudrate: {baudrate}, timeout: {timeout}: {str(e)}"
 
     def encender_servidor(self):
         pass
@@ -93,7 +99,11 @@ class ControladorServidor:
         self.server.robot.movimiento_lineal(x, y, z)
 
     def movimiento_lineal_con_velocidad(self, x: float, y: float, z: float, velocidad: float):
-        self.server.robot.movimiento_lineal_con_velocidad(x, y, z, velocidad)
+        try:
+            self.server.robot.movimiento_lineal_con_velocidad(x, y, z, velocidad)
+            return f"Robot se ha movido a ({x},{y},{z}) con una velocidad: {velocidad} con éxito"
+        except Exception as e:
+            return f"Error al intentar mover Robot a ({x},{y},{z}) con una velocidad {velocidad}: {str(e)}"
 
     def procesar_comando_gcode(self):
         pass

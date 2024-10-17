@@ -52,7 +52,29 @@ class InterfazServidor:
         elif opcion == "4":
             print("Control en base al modo de trabajo no implementado todavía.")
         elif opcion == "5":
-            self.controlador_servidor.reporte_informacion_general()
+            controlador, robot, log_de_trabajo, estado_actividad_actual = self.controlador_servidor.reporte_informacion_general()
+    
+            # Estado de conexión
+            estado_conexion = f"Puerto: {controlador.puerto}, Baudrate: {controlador.baudrate}, Timeout: {controlador.time_out}"
+            print(estado_conexion)
+    
+            # Posición del robot
+            posicion = f"x: {robot.x}, y: {robot.y}, z: {robot.z}"
+            print(posicion)
+    
+            # Estado de actividad actual
+            estado_actividad = "Finalizada" if estado_actividad_actual else "En proceso"
+            print(f"Estado de actividad actual: {estado_actividad}")
+    
+            # Detalle de actividades en el log de trabajo
+            print("\nOrden\tDetalle\tIP\tEstado\tMarca de Tiempo")
+            for actividad in log_de_trabajo.actividades:
+                estado = "Éxito" if actividad.exito else "Fallo"
+                print(f"{actividad.orden}\t{actividad.detalle}\t{actividad.user.ip}\t{estado}\t{actividad.marcaTiempo}")
+    
+            # Cantidad de actividades
+            cantidad_actividades = f"Cantidad de actividades: {len(log_de_trabajo.actividades)}"
+            print(cantidad_actividades)
         elif opcion == "6":
             self.controlador_servidor.reporte_log()
         else:
@@ -71,12 +93,39 @@ class InterfazServidor:
         elif opcion == "4":
             print("Control en base al modo de trabajo no implementado todavía.")
         elif opcion == "5":
-            self.controlador_servidor.reporte_informacion_general()
+            controlador, robot, log_de_trabajo, estado_actividad_actual = self.controlador_servidor.reporte_informacion_general()
+    
+            # Estado de conexión
+            estado_conexion = f"Puerto: {controlador.puerto}, Baudrate: {controlador.baudrate}, Timeout: {controlador.time_out}"
+            print(estado_conexion)
+    
+            # Posición del robot
+            posicion = f"x: {robot.x}, y: {robot.y}, z: {robot.z}"
+            print(posicion)
+    
+            # Estado de actividad actual
+            estado_actividad = "Finalizada" if estado_actividad_actual else "En proceso"
+            print(f"Estado de actividad actual: {estado_actividad}")
+    
+            # Detalle de actividades en el log de trabajo
+            print("\nOrden\tDetalle\tIP\tEstado\tMarca de Tiempo")
+            for actividad in log_de_trabajo.actividades:
+                estado = "Éxito" if actividad.exito else "Fallo"
+                print(f"{actividad.orden}\t{actividad.detalle}\t{actividad.user.ip}\t{estado}\t{actividad.marcaTiempo}")
+    
+            # Cantidad de actividades
+            cantidad_actividades = f"Cantidad de actividades: {len(log_de_trabajo.actividades)}"
+            print(cantidad_actividades)
+
         elif opcion == "6":
             self.controlador_servidor.reporte_log()
         elif opcion == "7":
-            controlador = self.controlador_servidor.mostrar_parametros_conexion()
-            print(f"Parámetros actuales: Puerto={controlador.puerto}, Baudrate={controlador.baudrate}, Timeout={controlador.time_out}")
+            try:
+                controlador = self.controlador_servidor.mostrar_parametros_conexion()
+                print(f"Puerto: {controlador.puerto}, Baudrate: {controlador.baudrate}, Timeout: {controlador.time_out}")
+            except (ValueError, AttributeError, RuntimeError) as e:
+                print(f"Error al mostrar los parámetros de conexión: {str(e)}")
+
         elif opcion == "8":
             self.controlador_servidor.encender_servidor()
         elif opcion == "9":
@@ -101,9 +150,9 @@ class InterfazServidor:
         if opcion == "0":
             print(self.controlador_servidor.mostrar_ayuda())
         elif opcion == "1":
-            self.controlador_servidor.connexion_robot(True)
+            print(self.controlador_servidor.connexion_robot(True))
         elif opcion == "2":
-            self.controlador_servidor.connexion_robot(False)
+            print(self.controlador_servidor.connexion_robot(False))
         elif opcion == "3":
             return
         else:
@@ -126,9 +175,9 @@ class InterfazServidor:
         if opcion == "0":
             print(self.controlador_servidor.mostrar_ayuda())
         elif opcion == "1":
-            self.controlador_servidor.activar_motores(True)
+            print(self.controlador_servidor.activar_motores(True))
         elif opcion == "2":
-            self.controlador_servidor.activar_motores(False)
+            print(self.controlador_servidor.activar_motores(False))
         elif opcion == "3":
             return
         else:
@@ -153,9 +202,9 @@ class InterfazServidor:
         if opcion == "0":
             print(self.controlador_servidor.mostrar_ayuda())
         elif opcion == "1":
-            self.controlador_servidor.modo_trabajo()
+            print(self.controlador_servidor.modo_trabajo())
         elif opcion == "2":
-            self.controlador_servidor.modo_coordenadas()
+            print(self.controlador_servidor.modo_coordenadas())
         elif opcion == "3":
             return
         else:
