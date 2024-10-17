@@ -7,9 +7,11 @@ class Controlador:
         self.puerto = puerto
         self.baudrate = baudrate
         self.time_out = time_out
-        self.serial_connection = serial.Serial(port=self.puerto, baudrate=self.baudrate, timeout=self.time_out)
+        self.serial_connection = serial.Serial(self.puerto, self.baudrate, timeout=self.time_out)
         self.leer()
         self.leer()
+
+    
 
     def leer(self, timeout=5):
         start_time = time.time()

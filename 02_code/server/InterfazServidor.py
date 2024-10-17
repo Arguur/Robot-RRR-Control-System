@@ -1,10 +1,15 @@
 from ControladorServidor import ControladorServidor
+import os
 
 class InterfazServidor:
     def __init__(self, controlador_servidor: ControladorServidor):
         self.controlador_servidor = controlador_servidor
+    
+    def limpiar_pantalla(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
     def mostrar_menu_usuario(self):
+        self.limpiar_pantalla()
         print("""
 +-------------------------------------------------------+
 |  Panel de control servidor Robot (usuario)            |
@@ -42,7 +47,7 @@ class InterfazServidor:
     def seleccionar_opcion_usuario(self):
         opcion = input("Seleccione una opción: ")
         if opcion == "0":
-            print(self.controlador_servidor.mostrar_ayuda())
+            self.mostrar_ayuda()
         elif opcion == "1":
             self.menu_conexion_robot()
         elif opcion == "2":
@@ -133,8 +138,37 @@ class InterfazServidor:
         else:
             print("Opción no válida.")
 
+    def mostrar_ayuda(self) -> str:
+
+        print("""
++------------------------------------------------+
+|                MENSAJE DE AYUDA                |
++------------------------------------------------+
+|  Comandos disponibles:                         |
+|  1. Conectar Robot: Se utiliza para            |
+|     establecer conexión con el robot.          |
+|     Ejemplo: conectar_robot(True)              |
+|                                                |
+|  2. Activar Motores: Permite activar o         |
+|     desactivar los motores del robot.          |
+|     Ejemplo: activar_motores(True)             |
+|                                                |
+|  3. Seleccionar Modo Trabajo: Cambia           |
+|     el modo de trabajo del robot.              |
+|     Ejemplo: modo_trabajo()                    |
+|                                                |
+|  4. Reporte General: Muestra el estado         |
+|     del sistema.                               |
+|     Ejemplo: reporte_informacion_general()     |
+|                                                |
+|  5. Ayuda: Muestra este mensaje.               |
+|     Ejemplo: mostrar_ayuda()                   |
++------------------------------------------------+
+""")
+        input("Presione enter para regresar al menu principal.")
 
     def menu_conexion_robot(self):
+        self.limpiar_pantalla()
         estado = "conectado" if self.controlador_servidor.server.robot.conectado else "desconectado"
         estado_string = f"Estado actual: [{estado}]"
         estado_string = f"  {estado_string.ljust(53)}"
@@ -163,6 +197,7 @@ class InterfazServidor:
             print("Opción no válida.")
 
     def menu_motores(self):
+        self.limpiar_pantalla()
         estado = "activados" if self.controlador_servidor.server.robot.motores else "desactivados"
         estado_string = f"Estado actual: [{estado}]"
         estado_string = f"  {estado_string.ljust(53)}"
@@ -191,6 +226,7 @@ class InterfazServidor:
             print("Opción no válida.")
 
     def menu_modo_trabajo(self):
+        self.limpiar_pantalla()
         instruccion = "manual" if not self.controlador_servidor.server.modo_trabajo else "automático"
         coordenadas = "absoluto" if not self.controlador_servidor.server.robot.modo_coordenadas else "relativo"
         instruccion_string = f"Tipo de instrucción: [{instruccion}]"
@@ -225,6 +261,7 @@ class InterfazServidor:
 
     def menu_control(self):
         while True:
+            self.limpiar_pantalla()
             if not self.controlador_servidor.server.modo_trabajo:  # Modo manual
                 robot = self.controlador_servidor.server.robot
                 posicion_actual = f"x: {robot.x}, y: {robot.y}, z: {robot.z}"
@@ -277,4 +314,3 @@ class InterfazServidor:
                     print("Opción no válida.")
             else:
                 print("Control en modo automático no implementado todavía.")
-        

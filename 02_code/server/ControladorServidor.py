@@ -6,34 +6,6 @@ class ControladorServidor:
     def __init__(self, servidor: Server):
         self.server = servidor
 
-    def mostrar_ayuda(self) -> str:
-        ayuda = (
-            "+------------------------------------------------+\n"
-            "|                MENSAJE DE AYUDA                |\n"
-            "+------------------------------------------------+\n"
-            "|  Comandos disponibles:                         |\n"
-            "|  1. Conectar Robot: Se utiliza para            |\n"
-            "|     establecer conexión con el robot.          |\n"
-            "|     Ejemplo: conectar_robot(True)              |\n"
-            "|                                                |\n"
-            "|  2. Activar Motores: Permite activar o         |\n"
-            "|     desactivar los motores del robot.          |\n"
-            "|     Ejemplo: activar_motores(True)             |\n"
-            "|                                                |\n"
-            "|  3. Seleccionar Modo Trabajo: Cambia           |\n"
-            "|     el modo de trabajo del robot.              |\n"
-            "|     Ejemplo: modo_trabajo()                    |\n"
-            "|                                                |\n"
-            "|  4. Reporte General: Muestra el estado         |\n"
-            "|     del sistema.                               |\n"
-            "|     Ejemplo: reporte_informacion_general()     |\n"
-            "|                                                |\n"
-            "|  5. Ayuda: Muestra este mensaje.               |\n"
-            "|     Ejemplo: mostrar_ayuda()                   |\n"
-            "+------------------------------------------------+\n"
-        )
-        return ayuda
-
     def connexion_robot(self, conectar: bool) -> str:
         try:
             self.server.robot.conectado = conectar
