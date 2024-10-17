@@ -127,7 +127,7 @@ class ControladorServidor:
                 self.server.robot.x, self.server.robot.y, self.server.robot.z, self.server.robot.gripper = map(float, coordenadas[0])
             return respuesta
         except Exception as e:
-            return f"Error al intentar mover Robot a ({x},{y},{z}) con una velocidad {velocidad}: {str(e)}"
+            return f"Error al intentar mover Robot a ({x},{y},{z}) con una velocidad de 100: {str(e)}"
 
     def movimiento_lineal_con_velocidad(self, x: float, y: float, z: float, velocidad: float):
         try:
