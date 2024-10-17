@@ -1,6 +1,6 @@
 from User import User
 from Robot import Robot
-from LogDeTrabajo import LogDeTrabajo
+from Log_de_trabajo import Log_de_trabajo
 
 
 class Server:
@@ -8,9 +8,9 @@ class Server:
         self.controlador = controlador
         self.modo_trabajo = modo_trabajo
         self.users = list()
-        init = controlador.inicializacion()
-        self.robot = Robot(init)
-        self.logDeTrabajo = LogDeTrabajo()
+        modo, x, y, z, e = controlador.inicializacion()
+        self.robot = Robot(modo, x, y, z, e)
+        self.log_de_trabajo = Log_de_trabajo()
 
     def validar_usuario(self, ip):
         for user in self.users:

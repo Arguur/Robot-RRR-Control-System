@@ -24,15 +24,15 @@ class Controlador:
 
     def escribir(self, s: str) -> None:
         if self.serial_connection:
-            self.serial_connection.write((s + '\r\n').encode('utf-8'))
+            self.serial_connection.write((s + '\r').encode('utf-8'))
 
 
     def inicializacion(self):
-        self.escribir("M114\r")
+        self.escribir("M114")
         # Parse the response
         modo_coordenadas = 0 if "ABSOLUTE MODE" in self.leer() else 1
         respuesta = self.leer()
         coordenadas = re.findall(r'X:(-?\d+\.\d+)\sY:(-?\d+\.\d+)\sZ:(-?\d+\.\d+)\sE:(-?\d+\.\d+)', respuesta)
         x, y, z, e = map(float, coordenadas[0])
         e_bool = e != 0.0
-        return [modo_coordenadas, x, y, z, e_bool]
+        return modo_coordenadas, x, y, z, e_bool

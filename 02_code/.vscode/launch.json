@@ -47,6 +47,13 @@
             "logging": {
                 "engineLogging": true
             }
+        },
+        {
+            "name": "Debug server",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/server/main.py",
+            "console": "integratedTerminal"
         }
     ]
 }
