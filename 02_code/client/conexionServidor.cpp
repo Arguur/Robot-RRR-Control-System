@@ -6,7 +6,7 @@ ConexionServidor::ConexionServidor(const std::string& direccion, int puerto)
     : direccion(direccion), puerto(puerto) {}
 
 bool ConexionServidor::establecerConexion() {
-    // Aquí iría la lógica para establecer la conexión usando XmlRpcClient
+    // Acá iría la lógica para establecer la conexión usando XmlRpcClient
     return true; // Retornar true si se conecta exitosamente
 }
 
