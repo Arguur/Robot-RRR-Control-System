@@ -1,13 +1,17 @@
-#ifndef VISTACLIENTE_H
-#define VISTACLIENTE_H
+// VistaCliente.h
+#ifndef VISTA_CLIENTE_H
+#define VISTA_CLIENTE_H
 
 #include <string>
 
 class VistaCliente {
 public:
-    void mostrarMenu();
-    void mostrarEstadoRobot(const std::string& estado);
-    void mostrarLogActividades(const std::string& log);
+    void mostrarMenu() const;
+    int obtenerOpcion() const;
+    void mostrarMensaje(const std::string& mensaje) const;
+    void mostrarError(const std::string& error) const;
+    std::string obtenerComando() const;
+    void limpiarPantalla() const;
 };
 
-#endif // VISTACLIENTE_H
+#endif // VISTA_CLIENTE_H

@@ -1,24 +1,33 @@
-#ifndef CONTROLADORCLIENTE_H
-#define CONTROLADORCLIENTE_H
+// ControladorCliente.h
+#ifndef CONTROLADOR_CLIENTE_H
+#define CONTROLADOR_CLIENTE_H
 
-#include "conexionServidor.h"
-#include "vistaCliente.h"
+#include "ConexionServidor.h"
+#include <string>
+#include <memory>
 
 class ControladorCliente {
 private:
-    ConexionServidor conexion;
-    VistaCliente vista;
+    std::unique_ptr<ConexionServidor> conexion;
     std::string direccionServidor;
     int puerto;
 
 public:
-    ControladorCliente(const std::string& direccion, int puerto);
-    void conectar();
+    ControladorCliente();
+    ~ControladorCliente();
+
+    bool conectar();
     void desconectar();
-    void enviarComando(const std::string& comando);
+    std::string enviarComando(const std::string& comando);
     std::string recibirRespuesta();
     void mostrarEstadoRobot();
     void mostrarLogActividades();
+
+    // Getters y setters
+    void setDireccionServidor(const std::string& dir) { direccionServidor = dir; }
+    void setPuerto(int port) { puerto = port; }
+    std::string getDireccionServidor() const { return direccionServidor; }
+    int getPuerto() const { return puerto; }
 };
 
-#endif // CONTROLADORCLIENTE_H
+#endif // CONTROLADOR_CLIENTE_H

@@ -1,40 +1,61 @@
-#include "controladorCliente.h"
+// main.cpp
+#include "VistaCliente.h"
+#include "ControladorCliente.h"
 #include <iostream>
+#include <memory>
 
 int main() {
-    std::string direccion = "localhost";
-    int puerto = 8080;
-
-    ControladorCliente controlador(direccion, puerto);
     VistaCliente vista;
-    
-    int opcion;
-    do {
-        vista.mostrarMenu();
-        std::cout << "Seleccione una opción: ";
-        std::cin >> opcion;
+    ControladorCliente controlador;
+    bool ejecutar = true;
 
-        switch (opcion) {
-            case 1:
-                controlador.conectar();
-                break;
-            case 2:
-                controlador.desconectar();
-                break;
-            case 3:
-                controlador.mostrarEstadoRobot();
-                break;
-            case 4:
-                controlador.mostrarLogActividades();
-                break;
-            case 5:
-                std::cout << "Saliendo...\n";
-                break;
-            default:
-                std::cout << "Opción no válida.\n";
-                break;
+    while (ejecutar) {
+        try {
+            vista.mostrarMenu();
+            int opcion = vista.obtenerOpcion();
+
+            switch (opcion) {
+                case 0:
+                    ejecutar = false;
+                    break;
+
+                case 1: // Conectar
+                    if (controlador.conectar()) {
+                        vista.mostrarMensaje("Conexión establecida con éxito");
+                    } else {
+                        vista.mostrarError("No se pudo establecer la conexión");
+                    }
+                    break;
+
+                case 2: // Desconectar
+                    controlador.desconectar();
+                    vista.mostrarMensaje("Desconexión realizada");
+                    break;
+
+                case 3: { // Enviar comando
+                    std::string comando = vista.obtenerComando();
+                    std::string respuesta = controlador.enviarComando(comando);
+                    vista.mostrarMensaje("Respuesta: " + respuesta);
+                    break;
+                }
+
+                case 4: // Ver estado
+                    controlador.mostrarEstadoRobot();
+                    break;
+
+                case 5: // Ver log
+                    controlador.mostrarLogActividades();
+                    break;
+
+                default:
+                    vista.mostrarError("Opción no válida");
+                    break;
+            }
         }
-    } while (opcion != 5);
+        catch (const std::exception& e) {
+            vista.mostrarError(e.what());
+        }
+    }
 
     return 0;
 }
