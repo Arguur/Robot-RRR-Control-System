@@ -175,14 +175,12 @@ class ControladorServidor:
             return f"Error al intentar realizar el homing: {str(e)}"
         
 class RequestHandler(SimpleXMLRPCRequestHandler):
-    rpc_paths = ('/RPC2',)
-
-with SimpleXMLRPCServer(('localhost', 8000), requestHandler=RequestHandler, ) as server:
-    server.register_instance(ControladorServidor(server, Log_de_trabajo()))
-    
+    rpc_paths = ('/RPC2',)    
     
     
     def run_server():
-        print("Servidor XML-RPC corriendo en http://localhost:8000")
-        server.serve_forever()
+        with SimpleXMLRPCServer(('localhost', 8000), requestHandler=RequestHandler, ) as serverXml:
+            serverXml.register_instance(ControladorServidor(serverXml, Log_de_trabajo()))
+            print("Servidor XML-RPC corriendo en http://localhost:8000")
+            serverXml.serve_forever()
         

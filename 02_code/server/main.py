@@ -1,9 +1,10 @@
-from ControladorServidor import ControladorServidor
+from ControladorServidor import ControladorServidor, RequestHandler
 from Server import Server
 from Controlador import Controlador
 from InterfazServidor import InterfazServidor
 from Log_de_trabajo import Log_de_trabajo
 import threading
+import time
 
 
 def run_menu():
@@ -11,7 +12,8 @@ def run_menu():
             interfaz.mostrar_menu_usuario()
 
 def run_server():
-    controlador_servidor.server.run_server()
+    RequestHandler.run_server()
+    
     
 
 if __name__ == "__main__":
@@ -24,8 +26,9 @@ if __name__ == "__main__":
     menu_thread = threading.Thread(target=run_menu)
     server_thread = threading.Thread(target=run_server)
 
-    menu_thread.start()
     server_thread.start()
+    time.sleep(1)
+    menu_thread.start()
 
     menu_thread.join()
     server_thread.join()
