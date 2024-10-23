@@ -1,17 +1,21 @@
 from Server import Server
 from Controlador import Controlador
+from Log_de_trabajo import Log_de_trabajo
 import re
 
 class ControladorServidor:
-    def __init__(self, servidor: Server):
+    def __init__(self, servidor: Server, Log_De_Trabajo: Log_de_trabajo):
         self.server = servidor
+        self.Log_De_Trabajo = Log_De_Trabajo
 
     def connexion_robot(self, conectar: bool) -> str:
         try:
             self.server.robot.conectado = conectar
             estado = "conectado" if conectar else "desconectado"
+            Log_de_trabajo.crear_actividad(self.Log_De_Trabajo, "Local", "comando","Robot {estado}", "exito")
             return f"Robot {estado} con éxito."
         except Exception as e:
+            Log_de_trabajo.crear_actividad(self.Log_De_Trabajo, "Local", "comando","Robot {estado}", "error")
             return f"Error al intentar conectar el robot: {str(e)}"
 
     def activar_desactivar_motores(self) -> str:
