@@ -58,8 +58,7 @@ class ControladorServidor:
             if "error" in respuesta.lower():
                 raise Exception("El robot no respondio correctamente")
             self.server.robot.modo_coordenadas = True if "RELATIVE MODE" in respuesta else False
-            modo = "relativo" if self.server.robot.modo_coordenadas else "absoluto"
-            return f"Modo de coordenadas cambiado a {modo}"
+            return respuesta
         except Exception as e:
             return f"Error al cambiar el modo de coordenadas: {str(e)}"
 
@@ -153,8 +152,7 @@ class ControladorServidor:
             self.server.controlador.leer()
             respuesta = self.server.controlador.leer()
             if "info" in respuesta.lower():
-                tiempo = re.search(r't=(\d+\.\d+)s', respuesta)
-                return f"Homing realizado con éxito en {tiempo.group(1)} segundos"
+                return respuesta
             else:
                 raise Exception("El robot no confirmo el homing")
         except Exception as e:
