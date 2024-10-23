@@ -3,6 +3,7 @@
 #define VISTA_CLIENTE_H
 
 #include <string>
+#include <utility>  // Para std::pair
 
 class VistaCliente {
 public:
@@ -12,6 +13,9 @@ public:
     void mostrarError(const std::string& error) const;
     std::string obtenerComando() const;
     void limpiarPantalla() const;
+    
+    // Método para obtener credenciales
+    std::pair<std::string, std::string> obtenerCredenciales() const;
 };
 
 #endif // VISTA_CLIENTE_H

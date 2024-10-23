@@ -11,12 +11,16 @@ private:
     std::unique_ptr<ConexionServidor> conexion;
     std::string direccionServidor;
     int puerto;
+    std::string usuario;
+    std::string password;
+    
+    void configurarConexion();
 
 public:
     ControladorCliente();
     ~ControladorCliente();
 
-    bool conectar();
+    bool conectar(const std::string& user, const std::string& pass);
     void desconectar();
     std::string enviarComando(const std::string& comando);
     std::string recibirRespuesta();
@@ -28,6 +32,7 @@ public:
     void setPuerto(int port) { puerto = port; }
     std::string getDireccionServidor() const { return direccionServidor; }
     int getPuerto() const { return puerto; }
+    std::string getUsuario() const { return usuario; }
 };
 
 #endif // CONTROLADOR_CLIENTE_H

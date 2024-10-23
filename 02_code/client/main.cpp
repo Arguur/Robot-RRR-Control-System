@@ -3,6 +3,7 @@
 #include "ControladorCliente.h"
 #include <iostream>
 #include <memory>
+#include <utility>
 
 int main() {
     VistaCliente vista;
@@ -17,19 +18,22 @@ int main() {
             switch (opcion) {
                 case 0:
                     ejecutar = false;
+                    vista.mostrarMensaje("Saliendo del programa...");
                     break;
 
-                case 1: // Conectar
-                    if (controlador.conectar()) {
-                        vista.mostrarMensaje("Conexión establecida con éxito");
+                case 1: { // Iniciar sesión
+                    auto credenciales = vista.obtenerCredenciales();
+                    if (controlador.conectar(credenciales.first, credenciales.second)) {
+                        vista.mostrarMensaje("Sesion iniciada con exito");
                     } else {
-                        vista.mostrarError("No se pudo establecer la conexión");
+                        vista.mostrarError("No se pudo iniciar sesión. Verifique sus credenciales.");
                     }
                     break;
+                }
 
-                case 2: // Desconectar
+                case 2: // Desconectar sesión
                     controlador.desconectar();
-                    vista.mostrarMensaje("Desconexión realizada");
+                    vista.mostrarMensaje("Sesión cerrada");
                     break;
 
                 case 3: { // Enviar comando

@@ -20,9 +20,17 @@ using namespace std;
 # include <winsock2.h>
 //# pragma lib(WS2_32.lib)
 
-# define EINPROGRESS	WSAEINPROGRESS
-# define EWOULDBLOCK	WSAEWOULDBLOCK
-# define ETIMEDOUT	    WSAETIMEDOUT
+#ifndef EWOULDBLOCK
+# define EWOULDBLOCK    WSAEWOULDBLOCK
+#endif
+
+#ifndef ETIMEDOUT
+# define ETIMEDOUT      WSAETIMEDOUT
+#endif
+
+#ifndef EINPROGRESS
+# define EINPROGRESS    WSAEINPROGRESS
+#endif
 #else
 extern "C" {
 # include <unistd.h>

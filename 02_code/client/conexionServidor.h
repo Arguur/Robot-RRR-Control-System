@@ -9,12 +9,14 @@ private:
     std::string direccion;
     int puerto;
     bool conectado;
+    std::string usuario;
+    std::string password;
 
 public:
     ConexionServidor(const std::string& dir = "localhost", int port = 8080);
     ~ConexionServidor();
     
-    bool establecerConexion();
+    bool establecerConexion(const std::string& user, const std::string& pass);
     void cerrarConexion();
     std::string enviarDatos(const std::string& datos);
     std::string recibirDatos();
@@ -23,6 +25,7 @@ public:
     bool estaConectado() const { return conectado; }
     std::string getDireccion() const { return direccion; }
     int getPuerto() const { return puerto; }
+    std::string getUsuario() const { return usuario; }
 };
 
 #endif // CONEXION_SERVIDOR_H
