@@ -14,15 +14,17 @@ class ControladorServidor:
         except Exception as e:
             return f"Error al intentar conectar el robot: {str(e)}"
 
-    def activar_desactivar_motores(self, activar: bool) -> str:
+    def activar_desactivar_motores(self) -> str:
         try:
             if self.server.robot.conectado is False:
                 raise ValueError("El robot no está conectado.")
             if not self.server.robot.motores:
                 self.server.controlador.escribir("M17")
+                self.server.robot.motores = True
                 return "Motores activados con éxito"
             else:
                 self.server.controlador.escribir("M18")
+                self.server.robot.motores = False
                 return "Motores desactivados con éxito"
         except Exception as e:
             return f"Error al intentar activar/desactivar los motores: {str(e)}"
@@ -56,8 +58,7 @@ class ControladorServidor:
             if "error" in respuesta.lower():
                 raise Exception("El robot no respondio correctamente")
             self.server.robot.modo_coordenadas = True if "RELATIVE MODE" in respuesta else False
-            modo = "relativo" if self.server.robot.modo_coordenadas else "absoluto"
-            return f"Modo de coordenadas cambiado a {modo}"
+            return respuesta
         except Exception as e:
             return f"Error al cambiar el modo de coordenadas: {str(e)}"
 
@@ -151,8 +152,7 @@ class ControladorServidor:
             self.server.controlador.leer()
             respuesta = self.server.controlador.leer()
             if "info" in respuesta.lower():
-                tiempo = re.search(r't=(\d+\.\d+)s', respuesta)
-                return f"Homing realizado con éxito en {tiempo.group(1)} segundos"
+                return respuesta
             else:
                 raise Exception("El robot no confirmo el homing")
         except Exception as e:
