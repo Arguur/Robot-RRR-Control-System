@@ -6,7 +6,8 @@ class InterfazServidor:
         self.controlador_servidor = controlador_servidor
     
     def limpiar_pantalla(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
+        # os.system('cls' if os.name == 'nt' else 'clear')
+        pass
 
     def mostrar_menu_usuario(self):
         self.limpiar_pantalla()
@@ -217,9 +218,9 @@ class InterfazServidor:
         if opcion == "0":
             print(self.controlador_servidor.mostrar_ayuda())
         elif opcion == "1":
-            print(self.controlador_servidor.activar_desactivar_motores(True))
+            print(self.controlador_servidor.activar_desactivar_motores())
         elif opcion == "2":
-            print(self.controlador_servidor.activar_motores(False))
+            print(self.controlador_servidor.activar_desactivar_motores())
         elif opcion == "3":
             return
         else:

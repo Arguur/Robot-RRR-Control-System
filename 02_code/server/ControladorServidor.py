@@ -1,34 +1,56 @@
 from Server import Server
 from Controlador import Controlador
+from Log_de_trabajo import Log_de_trabajo
+from xmlrpc.server import SimpleXMLRPCServer
+from xmlrpc.server import SimpleXMLRPCRequestHandler
 import re
 
 class ControladorServidor:
-    def __init__(self, servidor: Server):
+    def __init__(self, servidor: Server, log_de_trabajo: Log_de_trabajo):
         self.server = servidor
+        self.log_de_trabajo = log_de_trabajo
 
     def connexion_robot(self, conectar: bool) -> str:
         try:
             self.server.robot.conectado = conectar
             estado = "conectado" if conectar else "desconectado"
+            self.log_de_trabajo.crear_actividad("Local", "--''","Robot {estado}", "exito", "--")
             return f"Robot {estado} con éxito."
         except Exception as e:
+            self.log_de_trabajo.crear_actividad("Local", "--","Robot {estado}", "error", str(e))
             return f"Error al intentar conectar el robot: {str(e)}"
 
-    def activar_desactivar_motores(self, activar: bool) -> str:
+    def activar_desactivar_motores(self) -> str:
         try:
             if self.server.robot.conectado is False:
                 raise ValueError("El robot no está conectado.")
+            comando = ""
+            detalle_exito = ""
             if not self.server.robot.motores:
+                comando = "M17"
+                detalle_exito = "Motores activados"
                 self.server.controlador.escribir("M17")
+                self.log_de_trabajo.crear_actividad("Local", comando, detalle_exito, "exito", "--")
+                self.server.robot.motores = True
                 return "Motores activados con éxito"
             else:
+                comando = "M18"
+                detalle_exito = "Motores Desactivados"
                 self.server.controlador.escribir("M18")
+                self.server.robot.motores = False
+                self.log_de_trabajo.crear_actividad("Local", comando, detalle_exito, "exito", "--")
                 return "Motores desactivados con éxito"
         except Exception as e:
+            self.log_de_trabajo.crear_actividad("Local", comando, detalle_exito, "error", str(e))
             return f"Error al intentar activar/desactivar los motores: {str(e)}"
 
     def reporte_informacion_general(self):
-        return self.server.controlador, self.server.robot, self.server.log_de_trabajo, self.server.estado_actividad_actual
+        try:
+            self.log_de_trabajo.crear_actividad("Local", "--", "Obtener Informacion General", "exito", "--")
+            return self.server.controlador, self.server.robot, self.server.log_de_trabajo, self.server.estado_actividad_actual
+        except Exception as e:
+            self.log_de_trabajo.crear_actividad("Local", "--", "Obtener Informacion General", "error", str(e))
+            return f"Error al intentar obtener reporte de informacion general: {str(e)}"
 
 
     def reporte_log(self):
@@ -56,8 +78,7 @@ class ControladorServidor:
             if "error" in respuesta.lower():
                 raise Exception("El robot no respondio correctamente")
             self.server.robot.modo_coordenadas = True if "RELATIVE MODE" in respuesta else False
-            modo = "relativo" if self.server.robot.modo_coordenadas else "absoluto"
-            return f"Modo de coordenadas cambiado a {modo}"
+            return respuesta
         except Exception as e:
             return f"Error al cambiar el modo de coordenadas: {str(e)}"
 
@@ -144,6 +165,7 @@ class ControladorServidor:
             return f"Error al intentar activar/desactivar el gripper: {str(e)}"
         
     def realizar_homing(self):
+        return "hola"
         try:
             if self.server.robot.conectado is False:
                 raise ValueError("El robot no está conectado.")
@@ -151,10 +173,19 @@ class ControladorServidor:
             self.server.controlador.leer()
             respuesta = self.server.controlador.leer()
             if "info" in respuesta.lower():
-                tiempo = re.search(r't=(\d+\.\d+)s', respuesta)
-                return f"Homing realizado con éxito en {tiempo.group(1)} segundos"
+                return respuesta
             else:
                 raise Exception("El robot no confirmo el homing")
         except Exception as e:
             return f"Error al intentar realizar el homing: {str(e)}"
+        
+class RequestHandler(SimpleXMLRPCRequestHandler):
+    rpc_paths = ('/RPC2',)    
+    
+    
+    def run_server(controlador):
+        with SimpleXMLRPCServer(('localhost', 8080), requestHandler=RequestHandler, ) as serverXml:
+            serverXml.register_instance(controlador)
+            print("Servidor XML-RPC corriendo en http://localhost:8000")
+            serverXml.serve_forever()
         
