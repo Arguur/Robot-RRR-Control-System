@@ -10,50 +10,50 @@ void VistaCliente::mostrarMenu() const {
     std::cout << "|  Panel de control Robot RRR (Cliente)                 |\n";
     std::cout << "+-------------------------------------------------------+\n";
     std::cout << "|  (0) Ayuda                                            |\n";
-    std::cout << "|  (1) Conexión / desconexión de Robot                  |\n";
-    std::cout << "|  (2) Activación / desactivación de motores            |\n";
-    std::cout << "|  (3) Selección de modo de trabajo                     |\n";
+    std::cout << "|  (1) Conexion / desconexion de Robot                  |\n";
+    std::cout << "|  (2) Activacion / desactivacion de motores            |\n";
+    std::cout << "|  (3) Seleccion de modo de trabajo                     |\n";
     std::cout << "|  (4) Control (en base a modo trabajo)                 |\n";
-    std::cout << "|  (5) Reporte de información general                   |\n";
+    std::cout << "|  (5) Reporte de informacion general                   |\n";
     std::cout << "|  (6) Reporte log de trabajo del servidor              |\n";
-    std::cout << "|  (7) Salir                                           |\n";
+    std::cout << "|  (7) Salir                                            |\n";
     std::cout << "+-------------------------------------------------------+\n";
-    std::cout << "Seleccione una opción: ";
+    std::cout << "Seleccione una opcion: ";
 }
 
 void VistaCliente::mostrarMenuConexion() const {
     limpiarPantalla();
     std::cout << "\n+-------------------------------------------------------+\n";
-    std::cout << "|  1. Conexión / desconexión de Robot                   |\n";
+    std::cout << "|  1. Conexion / desconexion de Robot                   |\n";
     std::cout << "+-------------------------------------------------------+\n";
     std::cout << "|  (1) Conectar                                         |\n";
     std::cout << "|  (2) Desconectar                                      |\n";
     std::cout << "|  (3) Volver                                           |\n";
     std::cout << "+-------------------------------------------------------+\n";
-    std::cout << "Seleccione una opción: ";
+    std::cout << "Seleccione una opcion: ";
 }
 
 void VistaCliente::mostrarMenuMotores() const {
     limpiarPantalla();
     std::cout << "\n+-------------------------------------------------------+\n";
-    std::cout << "|  2. Activación / desactivación de motores             |\n";
+    std::cout << "|  2. Activacion / desactivacion de motores             |\n";
     std::cout << "+-------------------------------------------------------+\n";
     std::cout << "|  (1) Activar/Desactivar motores                       |\n";
     std::cout << "|  (2) Volver                                           |\n";
     std::cout << "+-------------------------------------------------------+\n";
-    std::cout << "Seleccione una opción: ";
+    std::cout << "Seleccione una opcion: ";
 }
 
 void VistaCliente::mostrarMenuModoTrabajo() const {
     limpiarPantalla();
     std::cout << "\n+-------------------------------------------------------+\n";
-    std::cout << "|  3. Selección de modo de trabajo                      |\n";
+    std::cout << "|  3. Seleccion de modo de trabajo                      |\n";
     std::cout << "+-------------------------------------------------------+\n";
     std::cout << "|  (1) Cambiar modo de trabajo (Manual/Automático)      |\n";
-    std::cout << "|  (2) Cambiar modo de coordenadas (Absoluto/Relativo) |\n";
+    std::cout << "|  (2) Cambiar modo de coordenadas (Absoluto/Relativo)  |\n";
     std::cout << "|  (3) Volver                                           |\n";
     std::cout << "+-------------------------------------------------------+\n";
-    std::cout << "Seleccione una opción: ";
+    std::cout << "Seleccione una opcion: ";
 }
 
 void VistaCliente::mostrarMenuControl() const {
@@ -66,7 +66,7 @@ void VistaCliente::mostrarMenuControl() const {
     std::cout << "|  (3) Mover Robot                                      |\n";
     std::cout << "|  (4) Volver                                           |\n";
     std::cout << "+-------------------------------------------------------+\n";
-    std::cout << "Seleccione una opción: ";
+    std::cout << "Seleccione una opcion: ";
 }
 
 void VistaCliente::mostrarAyuda() const {
@@ -74,20 +74,20 @@ void VistaCliente::mostrarAyuda() const {
     std::cout << "\n+-------------------------------------------------------+\n";
     std::cout << "|                     MENSAJE DE AYUDA                  |\n";
     std::cout << "+-------------------------------------------------------+\n";
-    std::cout << "| 1. Conexión/Desconexión:                              |\n";
-    std::cout << "|    - Establece o cierra la conexión con el robot       |\n";
+    std::cout << "| 1. Conexion/Desconexion:                              |\n";
+    std::cout << "|    - Establece o cierra la conexion con el robot      |\n";
     std::cout << "|                                                       |\n";
-    std::cout << "| 2. Activación de motores:                             |\n";
-    std::cout << "|    - Activa o desactiva los motores del robot          |\n";
+    std::cout << "| 2. Activacion de motores:                             |\n";
+    std::cout << "|    - Activa o desactiva los motores del robot         |\n";
     std::cout << "|                                                       |\n";
     std::cout << "| 3. Modo de trabajo:                                   |\n";
     std::cout << "|    - Manual: Control directo del robot                |\n";
-    std::cout << "|    - Automático: Ejecución de secuencias programadas  |\n";
+    std::cout << "|    - Automático: Ejecucion de secuencias programadas |\n";
     std::cout << "|                                                       |\n";
     std::cout << "| 4. Control:                                           |\n";
-    std::cout << "|    - Permite controlar el robot según el modo activo  |\n";
+    std::cout << "|    - Permite controlar el robot segun el modo activo  |\n";
     std::cout << "|                                                       |\n";
-    std::cout << "| 5. Información general:                               |\n";
+    std::cout << "| 5. Informacion general:                               |\n";
     std::cout << "|    - Muestra el estado actual del robot               |\n";
     std::cout << "|                                                       |\n";
     std::cout << "| 6. Log de trabajo:                                    |\n";
@@ -96,9 +96,8 @@ void VistaCliente::mostrarAyuda() const {
     esperarEnter();
 }
 
-
 void VistaCliente::mostrarEstadoConexion(bool conectado) const {
-    std::cout << "\nEstado de conexión: " << (conectado ? "Conectado" : "Desconectado") << std::endl;
+    std::cout << "\nEstado de conexion: " << (conectado ? "Conectado" : "Desconectado") << std::endl;
 }
 
 void VistaCliente::mostrarEstadoRobot(bool conectado, bool motoresActivos, 
@@ -119,8 +118,6 @@ void VistaCliente::mostrarEstadoRobot(bool conectado, bool motoresActivos,
     std::cout << "+-------------------------------------------------------+\n";
 }
 
-}
-
 int VistaCliente::obtenerOpcion() const {
     int opcion;
     std::cin >> opcion;
@@ -130,6 +127,49 @@ int VistaCliente::obtenerOpcion() const {
 
 std::tuple<std::string, std::string, std::string> VistaCliente::obtenerCredenciales() const {
     std::string usuario, password, alias;
-    std::cout << "\n=== Inicio de Sesión ===\n";
+    std::cout << "\n=== Inicio de Sesion ===\n";
     std::cout << "Usuario: ";
     std::getline(std::cin, usuario);
+    std::cout << "Password: ";
+    std::getline(std::cin, password);
+    std::cout << "Alias: ";
+    std::getline(std::cin, alias);
+    return std::make_tuple(usuario, password, alias);
+}
+
+std::tuple<double, double, double, double> VistaCliente::obtenerParametrosMovimiento() const {
+    double x, y, z, velocidad;
+    std::cout << "Ingrese coordenada X: ";
+    std::cin >> x;
+    std::cout << "Ingrese coordenada Y: ";
+    std::cin >> y;
+    std::cout << "Ingrese coordenada Z: ";
+    std::cin >> z;
+    std::cout << "Ingrese velocidad (Enter para valor por defecto 100): ";
+    std::string velStr;
+    std::cin.ignore();
+    std::getline(std::cin, velStr);
+    velocidad = velStr.empty() ? 100.0 : std::stod(velStr);
+    return std::make_tuple(x, y, z, velocidad);
+}
+
+void VistaCliente::mostrarMensaje(const std::string& mensaje) const {
+    std::cout << mensaje << std::endl;
+}
+
+void VistaCliente::mostrarError(const std::string& error) const {
+    std::cerr << "ERROR: " << error << std::endl;
+}
+
+void VistaCliente::limpiarPantalla() const {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void VistaCliente::esperarEnter() const {
+    std::cout << "\nPresione Enter para continuar...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}

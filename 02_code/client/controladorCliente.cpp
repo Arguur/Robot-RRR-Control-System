@@ -3,7 +3,7 @@
 #include <iostream>
 
 ControladorCliente::ControladorCliente() 
-    : direccionServidor("192.168.0.5"), puerto(8080), modo_trabajo(false) {
+    : direccionServidor("127.0.0.1"), puerto(8080), modo_trabajo(false) {
 }
 
 ControladorCliente::~ControladorCliente() {
@@ -31,14 +31,14 @@ void ControladorCliente::desconectar() {
 
 bool ControladorCliente::activarDesactivarMotores() {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     return conexion->activarDesactivarMotores();
 }
 
 bool ControladorCliente::cambiarModoTrabajo() {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     if (conexion->cambiarModoTrabajo(!modo_trabajo)) {
         modo_trabajo = !modo_trabajo;
@@ -49,42 +49,42 @@ bool ControladorCliente::cambiarModoTrabajo() {
 
 bool ControladorCliente::cambiarModoCoordenadas() {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     return conexion->cambiarModoCoordenadas();
 }
 
 bool ControladorCliente::moverRobot(double x, double y, double z, double velocidad) {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     return conexion->moverRobot(x, y, z, velocidad);
 }
 
 bool ControladorCliente::activarDesactivarGripper() {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     return conexion->activarDesactivarGripper();
 }
 
 bool ControladorCliente::realizarHoming() {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     return conexion->realizarHoming();
 }
 
 void ControladorCliente::mostrarEstadoRobot() {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     std::cout << conexion->obtenerEstadoRobot() << std::endl;
 }
 
 void ControladorCliente::mostrarLogActividades() {
     if (!conexion || !conexion->estaConectado()) {
-        throw std::runtime_error("No hay conexión activa con el servidor");
+        throw std::runtime_error("No hay conexion activa con el servidor");
     }
     std::cout << conexion->obtenerLogActividades() << std::endl;
 }

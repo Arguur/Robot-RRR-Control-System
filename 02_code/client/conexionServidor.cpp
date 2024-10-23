@@ -1,4 +1,4 @@
-// ConexionServidor.cpp
+// ConexionServidor.cpp    compilador: g++ 02_code/client/*.cpp 02_code/libs/*.cpp -I 02_code/libs -lws2_32 -o cliente
 #include "ConexionServidor.h"
 #include "XmlRpc.h"
 #include <stdexcept>
@@ -26,14 +26,12 @@ bool ConexionServidor::establecerConexion(const std::string& user, const std::st
         args[1] = pass;
         args[2] = userAlias;
         
-        // Autenticar primero
         if (cliente.execute("validar_usuario", args, result)) {
             if (bool(result)) {
                 usuario = user;
                 password = pass;
                 alias = userAlias;
                 
-                // Conectar el robot
                 args.clear();
                 args[0] = true;  // conectar = true
                 if (cliente.execute("connexion_robot", args, result)) {
@@ -48,9 +46,26 @@ bool ConexionServidor::establecerConexion(const std::string& user, const std::st
     return false;
 }
 
+void ConexionServidor::cerrarConexion() {
+    if (!conectado) return;
+    
+    try {
+        XmlRpcClient cliente(direccion.c_str(), puerto);
+        XmlRpcValue args, result;
+        args[0] = false;  // conectar = false
+        
+        if (cliente.execute("connexion_robot", args, result)) {
+            conectado = false;
+        }
+    } catch (...) {
+        // Aseguramos que el estado local se actualice incluso si hay error
+        conectado = false;
+    }
+}
+
 std::string ConexionServidor::enviarDatos(const std::string& comando, const std::string& parametros) {
     if (!conectado) {
-        throw std::runtime_error("No hay conexión establecida con el servidor");
+        throw std::runtime_error("No hay conexion establecida con el servidor");
     }
 
     try {
@@ -79,7 +94,7 @@ bool ConexionServidor::activarDesactivarMotores() {
         
         if (cliente.execute("activar_desactivar_motores", args, result)) {
             std::string respuesta = std::string(result);
-            motores = !motores;  // Cambiar estado
+            motores = !motores;
             return true;
         }
     } catch (...) {}
@@ -106,7 +121,7 @@ bool ConexionServidor::cambiarModoCoordenadas() {
         args[0] = alias;
         
         if (cliente.execute("modo_coordenadas", args, result)) {
-            modo_coordenadas = !modo_coordenadas;  // Cambiar estado
+            modo_coordenadas = !modo_coordenadas;
             return true;
         }
     } catch (...) {}
@@ -128,7 +143,6 @@ bool ConexionServidor::moverRobot(double newX, double newY, double newZ, double 
         }
         
         if (cliente.execute(metodo.c_str(), args, result)) {
-            // Actualizar posición si el movimiento fue exitoso
             x = newX;
             y = newY;
             z = newZ;
@@ -145,7 +159,7 @@ bool ConexionServidor::activarDesactivarGripper() {
         args[0] = alias;
         
         if (cliente.execute("activar_desactivar_gripper", args, result)) {
-            gripper = !gripper;  // Cambiar estado
+            gripper = !gripper;
             return true;
         }
     } catch (...) {}
@@ -159,7 +173,6 @@ bool ConexionServidor::realizarHoming() {
         args[0] = alias;
         
         if (cliente.execute("realizar_homing", args, result)) {
-            // Resetear posición a home
             x = y = z = 0;
             return true;
         }

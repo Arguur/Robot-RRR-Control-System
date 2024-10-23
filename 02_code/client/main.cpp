@@ -28,13 +28,13 @@ int main() {
                     if (subOpcion == 1 && !controlador.estaConectado()) {
                         auto [usuario, password, alias] = vista.obtenerCredenciales();
                         if (controlador.conectar(usuario, password, alias)) {
-                            vista.mostrarMensaje("Conexión establecida con éxito");
+                            vista.mostrarMensaje("Conexion establecida con exito");
                         } else {
-                            vista.mostrarError("No se pudo establecer la conexión");
+                            vista.mostrarError("No se pudo establecer la conexion");
                         }
                     } else if (subOpcion == 2 && controlador.estaConectado()) {
                         controlador.desconectar();
-                        vista.mostrarMensaje("Desconexión realizada");
+                        vista.mostrarMensaje("Desconexion realizada");
                     }
                     break;
                 }
@@ -69,7 +69,7 @@ int main() {
                     if (subOpcion == 1) {
                         if (controlador.cambiarModoTrabajo()) {
                             vista.mostrarMensaje(controlador.esModoManual() ? 
-                                               "Modo manual activado" : "Modo automático activado");
+                                               "Modo manual activado" : "Modo automatico activado");
                         }
                     } else if (subOpcion == 2) {
                         if (controlador.cambiarModoCoordenadas()) {
@@ -165,7 +165,7 @@ int main() {
                 }
 
                 default:
-                    vista.mostrarError("Opción no válida");
+                    vista.mostrarError("Opción no valida");
                     break;
             }
         }
