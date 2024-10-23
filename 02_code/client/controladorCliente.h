@@ -11,28 +11,35 @@ private:
     std::unique_ptr<ConexionServidor> conexion;
     std::string direccionServidor;
     int puerto;
-    std::string usuario;
-    std::string password;
-    
-    void configurarConexion();
+    bool modo_trabajo;  // false = manual, true = automático
 
 public:
     ControladorCliente();
     ~ControladorCliente();
 
-    bool conectar(const std::string& user, const std::string& pass);
+    // Métodos principales
+    bool conectar(const std::string& user, const std::string& pass, const std::string& alias);
     void desconectar();
-    std::string enviarComando(const std::string& comando);
-    std::string recibirRespuesta();
+    
+    // Control del robot
+    bool activarDesactivarMotores();
+    bool cambiarModoTrabajo();
+    bool cambiarModoCoordenadas();
+    bool moverRobot(double x, double y, double z, double velocidad = 100.0);
+    bool activarDesactivarGripper();
+    bool realizarHoming();
+    
+    // Información y reportes
     void mostrarEstadoRobot();
     void mostrarLogActividades();
 
-    // Getters y setters
-    void setDireccionServidor(const std::string& dir) { direccionServidor = dir; }
-    void setPuerto(int port) { puerto = port; }
-    std::string getDireccionServidor() const { return direccionServidor; }
-    int getPuerto() const { return puerto; }
-    std::string getUsuario() const { return usuario; }
+    // Getters
+    bool estaConectado() const;
+    bool estanMotoresActivos() const;
+    bool esModoManual() const { return !modo_trabajo; }
+    bool esModoRelativo() const;
+    bool estaGripperActivo() const;
+    void obtenerPosicionActual(double& x, double& y, double& z) const;
 };
 
 #endif // CONTROLADOR_CLIENTE_H
