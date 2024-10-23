@@ -1,6 +1,8 @@
 from Server import Server
 from Controlador import Controlador
 from Log_de_trabajo import Log_de_trabajo
+from xmlrpc.server import SimpleXMLRPCServer
+from xmlrpc.server import SimpleXMLRPCRequestHandler
 import re
 
 class ControladorServidor:
@@ -171,4 +173,16 @@ class ControladorServidor:
                 raise Exception("El robot no confirmo el homing")
         except Exception as e:
             return f"Error al intentar realizar el homing: {str(e)}"
+        
+class RequestHandler(SimpleXMLRPCRequestHandler):
+    rpc_paths = ('/RPC2',)
+
+with SimpleXMLRPCServer(('localhost', 8000), requestHandler=RequestHandler, ) as server:
+    server.register_instance(ControladorServidor(server, Log_de_trabajo()))
+    
+    
+    
+    def run_server():
+        print("Servidor XML-RPC corriendo en http://localhost:8000")
+        server.serve_forever()
         
