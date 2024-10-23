@@ -165,6 +165,7 @@ class ControladorServidor:
             return f"Error al intentar activar/desactivar el gripper: {str(e)}"
         
     def realizar_homing(self):
+        return "hola"
         try:
             if self.server.robot.conectado is False:
                 raise ValueError("El robot no está conectado.")
@@ -182,9 +183,9 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)    
     
     
-    def run_server():
-        with SimpleXMLRPCServer(('localhost', 8000), requestHandler=RequestHandler, ) as serverXml:
-            serverXml.register_instance(ControladorServidor(serverXml, Log_de_trabajo()))
+    def run_server(controlador):
+        with SimpleXMLRPCServer(('localhost', 8080), requestHandler=RequestHandler, ) as serverXml:
+            serverXml.register_instance(controlador)
             print("Servidor XML-RPC corriendo en http://localhost:8000")
             serverXml.serve_forever()
         

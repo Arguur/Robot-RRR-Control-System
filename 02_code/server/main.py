@@ -11,8 +11,8 @@ def run_menu():
         while True:
             interfaz.mostrar_menu_usuario()
 
-def run_server():
-    RequestHandler.run_server()
+def run_server(controlador):
+    RequestHandler.run_server(controlador)
     
     
 
@@ -21,10 +21,10 @@ if __name__ == "__main__":
     server = Server(modo_trabajo=False, controlador=controlador)
     log_de_trabajo = Log_de_trabajo()
     controlador_servidor = ControladorServidor(servidor=server, log_de_trabajo=log_de_trabajo)
-    interfaz = InterfazServidor(controlador_servidor=controlador_servidor)
+    interfaz = InterfazServidor(controlador_servidor)
 
     menu_thread = threading.Thread(target=run_menu)
-    server_thread = threading.Thread(target=run_server)
+    server_thread = threading.Thread(target=run_server(controlador_servidor))
 
     server_thread.start()
     time.sleep(1)

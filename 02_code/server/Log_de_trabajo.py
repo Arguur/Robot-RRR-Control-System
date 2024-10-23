@@ -17,6 +17,17 @@ class Log_de_trabajo:
         except FileNotFoundError:
             print("Error: No se pudo encontrar el archivo log_de_trabajo.csv")
 
+     # Método para guardar una actividad en el CSV
+    def guardar_en_csv(self, actividad: Actividad):
+        try:
+            with open('../03_anexo/log_de_trabajo.csv', mode='a', newline='') as file:
+                writer = csv.writer(file)
+                # Escribir los atributos de la actividad en el CSV
+                writer.writerow([actividad.id, actividad.ip, actividad.orden, actividad.detalle, actividad.exito, actividad.marcaTiempo])
+                print(f"Actividad guardada en CSV: ID={actividad.id}, IP={actividad.ip}, Orden={actividad.orden}, Detalle={actividad.detalle}, Exito={actividad.exito}, Informacion del error={actividad.error_detalle}, Marca de Tiempo={actividad.marcaTiempo}")
+        except Exception as e:
+            print(f"Error al escribir en el archivo log_de_trabajo.csv: {e}")
+
     # Método para crear una nueva actividad y agregarla al log y a la lista de actividades
     def crear_actividad(self, ip, orden, detalle, exito, error_detalle):
         nueva_actividad = Actividad(id=self.contador_id, ip=ip, orden=orden, detalle=detalle, exito=exito, error_detalle=error_detalle, marcaTiempo=datetime.now())
@@ -32,13 +43,4 @@ class Log_de_trabajo:
         
         print(f"Actividad creada y añadida al log: ID={nueva_actividad.id}, Orden={orden}, Detalle={detalle}, Exito={exito}")
 
-    # Método para guardar una actividad en el CSV
-    def guardar_en_csv(self, actividad: Actividad):
-        try:
-            with open('../03_anexo/log_de_trabajo.csv', mode='a', newline='') as file:
-                writer = csv.writer(file)
-                # Escribir los atributos de la actividad en el CSV
-                writer.writerow([actividad.id, actividad.ip, actividad.orden, actividad.detalle, actividad.exito, actividad.marcaTiempo])
-                print(f"Actividad guardada en CSV: ID={actividad.id}, IP={actividad.ip}, Orden={actividad.orden}, Detalle={actividad.detalle}, Exito={actividad.exito}, Informacion del error={actividad.error_detalle}, Marca de Tiempo={actividad.marcaTiempo}")
-        except Exception as e:
-            print(f"Error al escribir en el archivo log_de_trabajo.csv: {e}")
+   
