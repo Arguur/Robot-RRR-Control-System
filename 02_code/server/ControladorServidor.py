@@ -4,33 +4,43 @@ from Log_de_trabajo import Log_de_trabajo
 import re
 
 class ControladorServidor:
-    def __init__(self, servidor: Server, Log_De_Trabajo: Log_de_trabajo):
+    def __init__(self, servidor: Server, log_de_trabajo: Log_de_trabajo):
         self.server = servidor
-        self.Log_De_Trabajo = Log_De_Trabajo
+        self.log_de_trabajo = log_de_trabajo
 
     def connexion_robot(self, conectar: bool) -> str:
         try:
             self.server.robot.conectado = conectar
             estado = "conectado" if conectar else "desconectado"
-            Log_de_trabajo.crear_actividad(self.Log_De_Trabajo, "Local", "comando","Robot {estado}", "exito")
+            self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", "--''","Robot {estado}", "exito")
             return f"Robot {estado} con éxito."
         except Exception as e:
-            Log_de_trabajo.crear_actividad(self.Log_De_Trabajo, "Local", "comando","Robot {estado}", "error")
+            self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", "--","Robot {estado}", "error")
             return f"Error al intentar conectar el robot: {str(e)}"
 
     def activar_desactivar_motores(self) -> str:
         try:
             if self.server.robot.conectado is False:
                 raise ValueError("El robot no está conectado.")
+            comando = ""
+            detalle_exito = ""
             if not self.server.robot.motores:
+                comando = "M17"
+                detalle_exito = "Motores activados"
                 self.server.controlador.escribir("M17")
+                self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", {comando},{detalle_exito}, "exito")
                 self.server.robot.motores = True
                 return "Motores activados con éxito"
             else:
+                comando = "M18"
+                detalle_exito = "Motores Desactivados"
                 self.server.controlador.escribir("M18")
                 self.server.robot.motores = False
+                self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", {comando},{detalle_exito}, "exito")
                 return "Motores desactivados con éxito"
         except Exception as e:
+
+            self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", comando, {detalle_exito}, "error")
             return f"Error al intentar activar/desactivar los motores: {str(e)}"
 
     def reporte_informacion_general(self):
