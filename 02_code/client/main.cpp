@@ -1,58 +1,179 @@
-#include "controladorCliente.h"
+// main.cpp
+#include "VistaCliente.h"
+#include "ControladorCliente.h"
 #include <iostream>
+#include <memory>
 
 int main() {
-    std::string direccion = "localhost";
-    int puerto = 8080;
-    std::string usuario, password;
+    VistaCliente vista;
+    ControladorCliente controlador;
+    bool ejecutar = true;
 
-    std::cout << "Ingrese nombre de usuario: ";
-    std::cin >> usuario;
-    std::cout << "Ingrese contraseña: ";
-    std::cin >> password;
+    while (ejecutar) {
+        try {
+            vista.mostrarMenu();
+            int opcion = vista.obtenerOpcion();
 
-    ControladorCliente controlador(direccion, puerto, usuario, password);
+            switch (opcion) {
+                case 0: { // Ayuda
+                    vista.mostrarAyuda();
+                    break;
+                }
 
-    if (!controlador.autenticar()) {
-        std::cout << "Autenticación fallida. Saliendo...\n";
-        return 1;
-    }
+                case 1: { // Conexión/Desconexión
+                    vista.mostrarMenuConexion();
+                    vista.mostrarEstadoConexion(controlador.estaConectado());
+                    int subOpcion = vista.obtenerOpcion();
+                    
+                    if (subOpcion == 1 && !controlador.estaConectado()) {
+                        auto [usuario, password, alias] = vista.obtenerCredenciales();
+                        if (controlador.conectar(usuario, password, alias)) {
+                            vista.mostrarMensaje("Conexion establecida con exito");
+                        } else {
+                            vista.mostrarError("No se pudo establecer la conexion");
+                        }
+                    } else if (subOpcion == 2 && controlador.estaConectado()) {
+                        controlador.desconectar();
+                        vista.mostrarMensaje("Desconexion realizada");
+                    }
+                    break;
+                }
 
-    int opcion;
-    std::string comando;
+                case 2: { // Activación/Desactivación de motores
+                    if (!controlador.estaConectado()) {
+                        vista.mostrarError("Debe conectarse primero");
+                        break;
+                    }
+                    vista.mostrarMenuMotores();
+                    int subOpcion = vista.obtenerOpcion();
+                    
+                    if (subOpcion == 1) {
+                        if (controlador.activarDesactivarMotores()) {
+                            vista.mostrarMensaje(controlador.estanMotoresActivos() ? 
+                                               "Motores activados" : "Motores desactivados");
+                        } else {
+                            vista.mostrarError("Error al cambiar estado de los motores");
+                        }
+                    }
+                    break;
+                }
 
-    do {
-        controlador.mostrarMenu();
-        std::cout << "Seleccione una opción: ";
-        std::cin >> opcion;
+                case 3: { // Selección de modo de trabajo
+                    if (!controlador.estaConectado()) {
+                        vista.mostrarError("Debe conectarse primero");
+                        break;
+                    }
+                    vista.mostrarMenuModoTrabajo();
+                    int subOpcion = vista.obtenerOpcion();
+                    
+                    if (subOpcion == 1) {
+                        if (controlador.cambiarModoTrabajo()) {
+                            vista.mostrarMensaje(controlador.esModoManual() ? 
+                                               "Modo manual activado" : "Modo automatico activado");
+                        }
+                    } else if (subOpcion == 2) {
+                        if (controlador.cambiarModoCoordenadas()) {
+                            vista.mostrarMensaje(controlador.esModoRelativo() ? 
+                                               "Modo relativo activado" : "Modo absoluto activado");
+                        }
+                    }
+                    break;
+                }
 
-        switch (opcion) {
-            case 1:
-                controlador.conectar();
-                break;
-            case 2:
-                controlador.desconectar();
-                break;
-            case 3:
-                std::cout << "Introduzca el comando a enviar: ";
-                std::cin.ignore();  // Ignorar el salto de línea pendiente
-                std::getline(std::cin, comando);
-                controlador.enviarComando(comando);
-                break;
-            case 4:
-                controlador.mostrarEstadoRobot();
-                break;
-            case 5:
-                controlador.mostrarLogActividades();
-                break;
-            case 6:
-                std::cout << "Saliendo...\n";
-                break;
-            default:
-                std::cout << "Opción no válida.\n";
-                break;
+                case 4: { // Control
+                    if (!controlador.estaConectado()) {
+                        vista.mostrarError("Debe conectarse primero");
+                        break;
+                    }
+                    
+                    if (!controlador.esModoManual()) {
+                        vista.mostrarError("El control manual solo está disponible en modo manual");
+                        break;
+                    }
+
+                    bool controlActivo = true;
+                    while (controlActivo) {
+                        double x, y, z;
+                        controlador.obtenerPosicionActual(x, y, z);
+                        vista.mostrarEstadoRobot(
+                            controlador.estaConectado(),
+                            controlador.estanMotoresActivos(),
+                            controlador.esModoRelativo(),
+                            controlador.estaGripperActivo(),
+                            x, y, z
+                        );
+
+                        vista.mostrarMenuControl();
+                        int subOpcion = vista.obtenerOpcion();
+
+                        switch (subOpcion) {
+                            case 1: { // Gripper
+                                if (controlador.activarDesactivarGripper()) {
+                                    vista.mostrarMensaje(controlador.estaGripperActivo() ? 
+                                                       "Gripper activado" : "Gripper desactivado");
+                                }
+                                break;
+                            }
+                            case 2: { // Homing
+                                if (controlador.realizarHoming()) {
+                                    vista.mostrarMensaje("Homing completado");
+                                }
+                                break;
+                            }
+                            case 3: { // Mover
+                                auto [newX, newY, newZ, vel] = vista.obtenerParametrosMovimiento();
+                                if (controlador.moverRobot(newX, newY, newZ, vel)) {
+                                    vista.mostrarMensaje("Movimiento completado");
+                                }
+                                break;
+                            }
+                            case 4: // Volver
+                                controlActivo = false;
+                                break;
+                        }
+                    }
+                    break;
+                }
+
+                case 5: { // Reporte de información general
+                    if (!controlador.estaConectado()) {
+                        vista.mostrarError("Debe conectarse primero");
+                        break;
+                    }
+                    controlador.mostrarEstadoRobot();
+                    vista.esperarEnter();
+                    break;
+                }
+
+                case 6: { // Log de actividades
+                    if (!controlador.estaConectado()) {
+                        vista.mostrarError("Debe conectarse primero");
+                        break;
+                    }
+                    controlador.mostrarLogActividades();
+                    vista.esperarEnter();
+                    break;
+                }
+
+                case 7: { // Salir
+                    ejecutar = false;
+                    if (controlador.estaConectado()) {
+                        controlador.desconectar();
+                    }
+                    vista.mostrarMensaje("Saliendo del programa...");
+                    break;
+                }
+
+                default:
+                    vista.mostrarError("Opción no valida");
+                    break;
+            }
         }
-    } while (opcion != 6);
+        catch (const std::exception& e) {
+            vista.mostrarError(e.what());
+            vista.esperarEnter();
+        }
+    }
 
     return 0;
 }

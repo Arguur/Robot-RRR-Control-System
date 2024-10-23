@@ -14,10 +14,10 @@ class ControladorServidor:
         try:
             self.server.robot.conectado = conectar
             estado = "conectado" if conectar else "desconectado"
-            self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", "--''","Robot {estado}", "exito")
+            self.log_de_trabajo.crear_actividad("Local", "--''","Robot {estado}", "exito", "--")
             return f"Robot {estado} con éxito."
         except Exception as e:
-            self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", "--","Robot {estado}", "error")
+            self.log_de_trabajo.crear_actividad("Local", "--","Robot {estado}", "error", str(e))
             return f"Error al intentar conectar el robot: {str(e)}"
 
     def activar_desactivar_motores(self) -> str:
@@ -30,7 +30,7 @@ class ControladorServidor:
                 comando = "M17"
                 detalle_exito = "Motores activados"
                 self.server.controlador.escribir("M17")
-                self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", {comando},{detalle_exito}, "exito")
+                self.log_de_trabajo.crear_actividad("Local", comando, detalle_exito, "exito", "--")
                 self.server.robot.motores = True
                 return "Motores activados con éxito"
             else:
@@ -38,15 +38,19 @@ class ControladorServidor:
                 detalle_exito = "Motores Desactivados"
                 self.server.controlador.escribir("M18")
                 self.server.robot.motores = False
-                self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", {comando},{detalle_exito}, "exito")
+                self.log_de_trabajo.crear_actividad("Local", comando, detalle_exito, "exito", "--")
                 return "Motores desactivados con éxito"
         except Exception as e:
-
-            self.log_de_trabajo.crear_actividad(self.log_de_trabajo, "Local", comando, {detalle_exito}, "error")
+            self.log_de_trabajo.crear_actividad("Local", comando, detalle_exito, "error", str(e))
             return f"Error al intentar activar/desactivar los motores: {str(e)}"
 
     def reporte_informacion_general(self):
-        return self.server.controlador, self.server.robot, self.server.log_de_trabajo, self.server.estado_actividad_actual
+        try:
+            self.log_de_trabajo.crear_actividad("Local", "--", "Obtener Informacion General", "exito", "--")
+            return self.server.controlador, self.server.robot, self.server.log_de_trabajo, self.server.estado_actividad_actual
+        except Exception as e:
+            self.log_de_trabajo.crear_actividad("Local", "--", "Obtener Informacion General", "error", str(e))
+            return f"Error al intentar obtener reporte de informacion general: {str(e)}"
 
 
     def reporte_log(self):
@@ -161,6 +165,7 @@ class ControladorServidor:
             return f"Error al intentar activar/desactivar el gripper: {str(e)}"
         
     def realizar_homing(self):
+        return "hola"
         try:
             if self.server.robot.conectado is False:
                 raise ValueError("El robot no está conectado.")
@@ -178,9 +183,9 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)    
     
     
-    def run_server():
-        with SimpleXMLRPCServer(('localhost', 8000), requestHandler=RequestHandler, ) as serverXml:
-            serverXml.register_instance(ControladorServidor(serverXml, Log_de_trabajo()))
+    def run_server(controlador):
+        with SimpleXMLRPCServer(('localhost', 8080), requestHandler=RequestHandler, ) as serverXml:
+            serverXml.register_instance(controlador)
             print("Servidor XML-RPC corriendo en http://localhost:8000")
             serverXml.serve_forever()
         

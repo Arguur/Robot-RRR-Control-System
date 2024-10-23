@@ -1,13 +1,29 @@
-#ifndef VISTACLIENTE_H
-#define VISTACLIENTE_H
+// VistaCliente.h
+#ifndef VISTA_CLIENTE_H
+#define VISTA_CLIENTE_H
 
 #include <string>
+#include <tuple>
 
 class VistaCliente {
 public:
-    void mostrarMenu();  // Cambiado para reflejar las nuevas opciones del menú
-    void mostrarEstadoRobot(const std::string& estado);
-    void mostrarLogActividades(const std::string& log);
+    void mostrarMenu() const;
+    void mostrarMenuConexion() const;
+    void mostrarMenuMotores() const;
+    void mostrarMenuModoTrabajo() const;
+    void mostrarMenuControl() const;
+    void mostrarAyuda() const;
+    void mostrarEstadoConexion(bool conectado) const;
+    void mostrarEstadoRobot(bool conectado, bool motoresActivos, bool modoRelativo, 
+                           bool gripperActivo, double x, double y, double z) const;
+    
+    int obtenerOpcion() const;
+    std::tuple<std::string, std::string, std::string> obtenerCredenciales() const;
+    std::tuple<double, double, double, double> obtenerParametrosMovimiento() const;
+    void mostrarMensaje(const std::string& mensaje) const;
+    void mostrarError(const std::string& error) const;
+    void limpiarPantalla() const;
+    void esperarEnter() const;
 };
 
-#endif // VISTACLIENTE_H
+#endif // VISTA_CLIENTE_H

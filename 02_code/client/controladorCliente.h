@@ -1,28 +1,45 @@
-#ifndef CONTROLADORCLIENTE_H
-#define CONTROLADORCLIENTE_H
+// ControladorCliente.h
+#ifndef CONTROLADOR_CLIENTE_H
+#define CONTROLADOR_CLIENTE_H
 
-#include "conexionServidor.h"
-#include "vistaCliente.h"
+#include "ConexionServidor.h"
 #include <string>
+#include <memory>
 
 class ControladorCliente {
 private:
-    ConexionServidor conexion;
-    VistaCliente vista;
+    std::unique_ptr<ConexionServidor> conexion;
     std::string direccionServidor;
     int puerto;
-    std::string alias;
+    bool modo_trabajo;  // false = manual, true = automático
 
 public:
-    ControladorCliente(const std::string& direccion, int puerto, const std::string& usuario, const std::string& password);
-    bool autenticar();
-    void conectar();
+    ControladorCliente();
+    ~ControladorCliente();
+
+    // Métodos principales
+    bool conectar(const std::string& user, const std::string& pass, const std::string& alias);
     void desconectar();
-    void enviarComando(const std::string& comando);
-    std::string recibirRespuesta();
+    
+    // Control del robot
+    bool activarDesactivarMotores();
+    bool cambiarModoTrabajo();
+    bool cambiarModoCoordenadas();
+    bool moverRobot(double x, double y, double z, double velocidad = 100.0);
+    bool activarDesactivarGripper();
+    bool realizarHoming();
+    
+    // Información y reportes
     void mostrarEstadoRobot();
     void mostrarLogActividades();
-    void mostrarMenu();
+
+    // Getters
+    bool estaConectado() const;
+    bool estanMotoresActivos() const;
+    bool esModoManual() const { return !modo_trabajo; }
+    bool esModoRelativo() const;
+    bool estaGripperActivo() const;
+    void obtenerPosicionActual(double& x, double& y, double& z) const;
 };
 
-#endif // CONTROLADORCLIENTE_H
+#endif // CONTROLADOR_CLIENTE_H
