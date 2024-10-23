@@ -14,15 +14,17 @@ class ControladorServidor:
         except Exception as e:
             return f"Error al intentar conectar el robot: {str(e)}"
 
-    def activar_desactivar_motores(self, activar: bool) -> str:
+    def activar_desactivar_motores(self) -> str:
         try:
             if self.server.robot.conectado is False:
                 raise ValueError("El robot no está conectado.")
             if not self.server.robot.motores:
                 self.server.controlador.escribir("M17")
+                self.server.robot.motores = True
                 return "Motores activados con éxito"
             else:
                 self.server.controlador.escribir("M18")
+                self.server.robot.motores = False
                 return "Motores desactivados con éxito"
         except Exception as e:
             return f"Error al intentar activar/desactivar los motores: {str(e)}"
