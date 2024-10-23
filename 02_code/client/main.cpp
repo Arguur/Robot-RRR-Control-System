@@ -4,13 +4,25 @@
 int main() {
     std::string direccion = "localhost";
     int puerto = 8080;
+    std::string usuario, password;
 
-    ControladorCliente controlador(direccion, puerto);
-    VistaCliente vista;
-    
+    std::cout << "Ingrese nombre de usuario: ";
+    std::cin >> usuario;
+    std::cout << "Ingrese contraseña: ";
+    std::cin >> password;
+
+    ControladorCliente controlador(direccion, puerto, usuario, password);
+
+    if (!controlador.autenticar()) {
+        std::cout << "Autenticación fallida. Saliendo...\n";
+        return 1;
+    }
+
     int opcion;
+    std::string comando;
+
     do {
-        vista.mostrarMenu();
+        controlador.mostrarMenu();
         std::cout << "Seleccione una opción: ";
         std::cin >> opcion;
 
@@ -22,19 +34,25 @@ int main() {
                 controlador.desconectar();
                 break;
             case 3:
-                controlador.mostrarEstadoRobot();
+                std::cout << "Introduzca el comando a enviar: ";
+                std::cin.ignore();  // Ignorar el salto de línea pendiente
+                std::getline(std::cin, comando);
+                controlador.enviarComando(comando);
                 break;
             case 4:
-                controlador.mostrarLogActividades();
+                controlador.mostrarEstadoRobot();
                 break;
             case 5:
+                controlador.mostrarLogActividades();
+                break;
+            case 6:
                 std::cout << "Saliendo...\n";
                 break;
             default:
                 std::cout << "Opción no válida.\n";
                 break;
         }
-    } while (opcion != 5);
+    } while (opcion != 6);
 
     return 0;
 }

@@ -5,7 +5,7 @@
 
 class VistaCliente {
 public:
-    void mostrarMenu();
+    void mostrarMenu();  // Cambiado para reflejar las nuevas opciones del menú
     void mostrarEstadoRobot(const std::string& estado);
     void mostrarLogActividades(const std::string& log);
 };

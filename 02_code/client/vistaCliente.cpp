@@ -2,11 +2,16 @@
 #include <iostream>
 
 void VistaCliente::mostrarMenu() {
-    std::cout << "1. Conectar\n";
-    std::cout << "2. Desconectar\n";
-    std::cout << "3. Mostrar estado del robot\n";
-    std::cout << "4. Mostrar log de actividades\n";
-    std::cout << "5. Salir\n";
+    std::cout << "+-------------------------------------------------------+\n";
+    std::cout << "|                     Menú Principal                    |\n";
+    std::cout << "+-------------------------------------------------------+\n";
+    std::cout << "|  (1) Conectar                                         |\n";
+    std::cout << "|  (2) Desconectar                                      |\n";
+    std::cout << "|  (3) Enviar comando                                   |\n";
+    std::cout << "|  (4) Mostrar estado del robot                         |\n";
+    std::cout << "|  (5) Mostrar log de actividades                       |\n";
+    std::cout << "|  (6) Salir                                            |\n";
+    std::cout << "+-------------------------------------------------------+\n";
 }
 
 void VistaCliente::mostrarEstadoRobot(const std::string& estado) {
