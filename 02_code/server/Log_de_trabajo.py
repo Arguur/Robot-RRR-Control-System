@@ -18,8 +18,8 @@ class Log_de_trabajo:
             print("Error: No se pudo encontrar el archivo log_de_trabajo.csv")
 
     # Método para crear una nueva actividad y agregarla al log y a la lista de actividades
-    def crear_actividad(self, ip, orden, detalle, exito):
-        nueva_actividad = Actividad(id=self.contador_id, ip=ip, orden=orden, detalle=detalle, exito=exito, marcaTiempo=datetime.now())
+    def crear_actividad(self, ip, orden, detalle, exito, error_detalle):
+        nueva_actividad = Actividad(id=self.contador_id, ip=ip, orden=orden, detalle=detalle, exito=exito, error_detalle=error_detalle, marcaTiempo=datetime.now())
         
         # Guardar en el CSV
         self.guardar_en_csv(nueva_actividad)
@@ -39,6 +39,6 @@ class Log_de_trabajo:
                 writer = csv.writer(file)
                 # Escribir los atributos de la actividad en el CSV
                 writer.writerow([actividad.id, actividad.ip, actividad.orden, actividad.detalle, actividad.exito, actividad.marcaTiempo])
-                print(f"Actividad guardada en CSV: ID={actividad.id}, IP={actividad.ip}, Orden={actividad.orden}, Detalle={actividad.detalle}, Exito={actividad.exito}, Marca de Tiempo={actividad.marcaTiempo}")
+                print(f"Actividad guardada en CSV: ID={actividad.id}, IP={actividad.ip}, Orden={actividad.orden}, Detalle={actividad.detalle}, Exito={actividad.exito}, Informacion del error={actividad.error_detalle}, Marca de Tiempo={actividad.marcaTiempo}")
         except Exception as e:
             print(f"Error al escribir en el archivo log_de_trabajo.csv: {e}")
